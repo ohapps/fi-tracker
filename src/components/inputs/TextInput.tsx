@@ -43,8 +43,8 @@ export function TextInput({
     if (!name || !setValue) return;
 
     // Allow user to freely type, just update form value as number (or empty)
-    let raw = e.target.value.replace(/,/g, '');
-    let num = parseFloat(raw);
+    const raw = e.target.value.replace(/,/g, '');
+    const num = parseFloat(raw);
     if (isNaN(num)) {
       setValue(name, '');
     } else {
@@ -54,7 +54,7 @@ export function TextInput({
 
   // Format on blur
   const handleCurrencyBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    let raw = e.target.value.replace(/,/g, '');
+    const raw = e.target.value.replace(/,/g, '');
     let num = parseFloat(raw);
     if (!isNaN(num)) {
       num = Math.round(num * 100) / 100;
@@ -74,8 +74,8 @@ export function TextInput({
 
     if (!name || !setValue) return;
 
-    let raw = e.target.value;
-    let num = parseFloat(raw);
+    const raw = e.target.value;
+    const num = parseFloat(raw);
     if (isNaN(num)) {
       setValue(name, '');
     } else {
@@ -95,19 +95,18 @@ export function TextInput({
           type="text"
           inputMode="decimal"
           placeholder={placeholder}
-          className={`w-full ${error ? 'border-red-500' : ''} bg-white ${
-            readOnly ? 'bg-gray-100' : ''
-          }`}
+          className={`w-full ${error ? 'border-red-500' : ''} bg-white ${readOnly ? 'bg-gray-100' : ''
+            }`}
           readOnly={readOnly}
           defaultValue={
             name &&
-            getValues &&
-            getValues(name) !== undefined &&
-            getValues(name) !== ''
+              getValues &&
+              getValues(name) !== undefined &&
+              getValues(name) !== ''
               ? Number(getValues(name)).toLocaleString('en-US', {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })
               : ''
           }
           {...(value !== undefined && { value })}
@@ -119,9 +118,8 @@ export function TextInput({
           type="number"
           inputMode="numeric"
           placeholder={placeholder}
-          className={`w-full ${error ? 'border-red-500' : ''} bg-white ${
-            readOnly ? 'bg-gray-100' : ''
-          }`}
+          className={`w-full ${error ? 'border-red-500' : ''} bg-white ${readOnly ? 'bg-gray-100' : ''
+            }`}
           readOnly={readOnly}
           defaultValue={
             name && getValues && getValues(name) !== undefined

@@ -1,5 +1,5 @@
-export interface ActionResult {
+export interface ActionResult<T = void> {
     success: boolean;
-    data?: any;
-    error?: string;
+    data?: T;
+    error?: string | null;
 }

@@ -13,7 +13,7 @@ import AddTransactionButton from './AddTransactionButton';
 import EditTransactionModal from './EditTransactionModal';
 import { TransactionActionMenu } from './TransactionActionMenu';
 import { DeleteTransactionModal } from './DeleteTransactionModal';
-import { TransactionType } from '@/types/investments';
+import { Transaction, TransactionType } from '@/types/investments';
 import {
   Pagination,
   PaginationContent,
@@ -30,11 +30,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
 interface InvestmentTransactionsCardProps {
   id: string;
   transactions: {
-    transactions: any[];
+    transactions: Transaction[];
     total: number;
   };
   page: number;
@@ -97,7 +96,7 @@ export default function InvestmentTransactionsCard({
                 </TableCell>
               </TableRow>
             ) : (
-              transactions.transactions.map((tx: any) => (
+              transactions.transactions.map((tx: Transaction) => (
                 <TableRow key={tx.id}>
                   <TableCell>
                     {tx.transactionDate

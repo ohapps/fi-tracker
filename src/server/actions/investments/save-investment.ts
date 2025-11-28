@@ -134,7 +134,8 @@ export async function saveInvestment(investment: Investment): Promise<ActionResu
 
             return { success: true, data: doc._id.toString(), error: null };
         }
-    } catch (err: any) {
-        return { success: false, data: null, error: err?.message || 'Unknown error' };
+    } catch (err) {
+        const message = err instanceof Error ? err.message : 'Unknown error';
+        return { success: false, data: null, error: message };
     }
 }

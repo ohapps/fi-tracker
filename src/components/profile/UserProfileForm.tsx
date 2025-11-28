@@ -40,7 +40,7 @@ export default function UserProfileForm({ userProfile }: UserProfileFormProps) {
 
   useEffect(() => {
     methods.reset(userProfile);
-  }, [userProfile]);
+  }, [methods, userProfile]);
 
   return (
     <FormProvider {...methods}>

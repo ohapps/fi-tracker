@@ -30,6 +30,7 @@ export async function saveAccountAction(data: Account): Promise<ActionResult> {
     }
     return { success: true };
   } catch (error) {
+    console.error(error);
     return { success: false, error: 'Failed to save account' };
   }
 }

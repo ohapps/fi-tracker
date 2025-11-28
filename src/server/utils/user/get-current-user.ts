@@ -1,8 +1,8 @@
 import dbConnect from "@/server/db/connect";
-import { User, UserModel } from "@/server/db/schema";
+import { UserModel } from "@/server/db/schema";
 import { auth0 } from "@/server/security/auth0";
 
-export const getCurrentUser = async (): Promise<User> => {
+export const getCurrentUser = async () => {
     const session = await auth0.getSession();
 
     if (!session || !session.user) {

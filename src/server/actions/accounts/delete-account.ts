@@ -26,6 +26,7 @@ export async function deleteAccountAction(account: Account): Promise<ActionResul
             return { success: false, error: 'Account not found or not deleted' };
         }
     } catch (error) {
+        console.error(error);
         return { success: false, error: 'Failed to delete account' };
     }
 }

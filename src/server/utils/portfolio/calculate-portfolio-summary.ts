@@ -4,6 +4,7 @@ import { AccountType } from '@/types/investments';
 import { getCurrentUser } from '../user/get-current-user';
 import { calculateMonthlyIncome } from './calculate-monthly-income';
 import { formatCurrency } from '@/utils/currency-utils';
+import { Expense, Income, Retirement } from '@/types/profile';
 
 export async function calculatePortfolioSummary(): Promise<PortfolioSummary> {
     const user = await getCurrentUser();
@@ -28,9 +29,9 @@ export async function calculatePortfolioSummary(): Promise<PortfolioSummary> {
             0
         );
 
-    const totalMonthlyExpenses = user.expenses.reduce((total, expense) => total + expense.amount, 0);
-    const totalMonthlyIncome = user.income.reduce((total, income) => total + income.amount, 0);
-    const totalRetirementIncome = user.retirement.reduce((total, retirement) => total + retirement.amount, 0);
+    const totalMonthlyExpenses = user.expenses.reduce((total: number, expense: Expense) => total + expense.amount, 0);
+    const totalMonthlyIncome = user.income.reduce((total: number, income: Income) => total + income.amount, 0);
+    const totalRetirementIncome = user.retirement.reduce((total: number, retirement: Retirement) => total + retirement.amount, 0);
 
     const monthsOfReserves =
         totalMonthlyExpenses > 0
@@ -61,7 +62,7 @@ export async function calculatePortfolioSummary(): Promise<PortfolioSummary> {
 
     const incomeExpenseDifference = totalMonthlyIncome - totalMonthlyExpenses;
     const incomeCoversExpenses = incomeExpenseDifference >= 0;
-    const maxIncome = user.income.reduce((max, income) => Math.max(max, income.amount), 0);
+    const maxIncome = user.income.reduce((max: number, income: Income) => Math.max(max, income.amount), 0);
     const secondaryMonthlyIncome = totalMonthlyIncome - maxIncome;
     const monthlyIncomeValues = Object.values(monthlyIncome);
     const averageMonthlyPassiveIncome = monthlyIncomeValues.length > 0

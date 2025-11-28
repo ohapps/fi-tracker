@@ -78,7 +78,7 @@ export default function EditTransactionModal({
         description: '',
       });
     }
-  }, [transactionAction, methods]);
+  }, [transactionAction, methods, investmentId]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
