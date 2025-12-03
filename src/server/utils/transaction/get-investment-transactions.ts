@@ -1,6 +1,9 @@
 import { TransactionModel } from '@/server/db/schema';
+import dbConnect from '@/server/db/connect';
 
 export async function getInvestmentTransactions(investmentId: string, skip?: number, limit?: number) {
+    await dbConnect();
+
     let query = TransactionModel.find({ investmentId }).sort({ transactionDate: -1 });
 
     if (typeof skip === 'number' && typeof limit === 'number') {

@@ -1,9 +1,12 @@
 import { TransactionModel } from "@/server/db/schema";
+import dbConnect from '@/server/db/connect';
 import { Investment, TransactionType } from "@/types/investments";
 import { MonthlyIncome } from "@/types/portfolio";
 import { endOfMonth, format, startOfMonth, subMonths } from "date-fns";
 
 export async function calculateMonthlyIncome(investments: Investment[]): Promise<MonthlyIncome> {
+    await dbConnect();
+
     // Get transactions for the last 12 months
     const today = new Date();
     const twelveMonthsAgo = subMonths(today, 12);
