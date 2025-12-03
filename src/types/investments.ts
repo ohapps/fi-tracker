@@ -22,9 +22,9 @@ export const InvestmentSchema = z.object({
     description: z.string().min(1),
     type: z.enum(InvestmentType),
     accountType: z.enum(AccountType),
-    costBasis: z.number(),
-    currentDebt: z.number(),
-    currentValue: z.number(),
+    costBasis: z.number('Please enter a valid amount').min(0, 'Cost basis cannot be negative'),
+    currentDebt: z.number('Please enter a valid amount').min(0, 'Current debt cannot be negative'),
+    currentValue: z.number('Please enter a valid amount').min(0, 'Current value cannot be negative'),
     createdAt: z.date().optional(),
     updatedAt: z.date().optional(),
 });

@@ -46,7 +46,7 @@ export function TextInput({
     const raw = e.target.value.replace(/,/g, '');
     const num = parseFloat(raw);
     if (isNaN(num)) {
-      setValue(name, '');
+      setValue(name, '', { shouldValidate: true });
     } else {
       setValue(name, num, { shouldValidate: true });
     }

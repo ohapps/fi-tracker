@@ -26,10 +26,16 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Tasks
 
-- deploy app
+- clean up invalid transactions
+- investigate timestamp off by a day issue
+- fix empty state - no expense or income
+- add ability to sort expenses, income and retirement on profile page
+- create favicon / logo
+  - https://logo.utities.online/
 - reporting enhancements
   - investment level reporting
   - account level reporting
+- add global error page
 - authentication
   - add auto logout and token refresh
 - project cleanup

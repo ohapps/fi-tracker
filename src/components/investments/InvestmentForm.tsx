@@ -13,6 +13,8 @@ import { useTransition } from 'react';
 import { saveInvestment } from '@/server/actions/investments/save-investment';
 import { toast } from 'sonner';
 import { redirect } from 'next/navigation';
+import { QuickUpdateModal } from './QuickUpdateModal';
+import { useState } from 'react';
 
 interface InvestmentFormProps {
   investment?: Investment;
@@ -31,8 +33,26 @@ export default function InvestmentForm({
 
   const {
     handleSubmit,
+    setValue,
+    getValues,
     formState: { isSubmitting },
   } = methods;
+
+  const [isQuickUpdateOpen, setIsQuickUpdateOpen] = useState(false);
+
+  const handleQuickUpdate = (type: string, amount: number) => {
+    const currentVal = getValues('currentValue') || 0;
+    const currentCost = getValues('costBasis') || 0;
+
+    const adjustment = type === 'purchase' ? amount : -amount;
+    const newVal = currentVal + adjustment;
+    const newCost = currentCost + adjustment;
+
+    setValue('currentValue', Math.max(newVal, 0), { shouldValidate: true });
+    setValue('costBasis', Math.max(newCost, 0), { shouldValidate: true });
+
+    handleSubmit(onSubmit)();
+  };
 
   const onSubmit = (data: Investment) => {
     startTransition(async () => {
@@ -105,13 +125,29 @@ export default function InvestmentForm({
                   </>
                 )}
               </div>
-              <Button type="submit" disabled={isSubmitting || isPending}>
-                Save
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsQuickUpdateOpen(true)}
+                  disabled={isSubmitting || isPending}
+                >
+                  Quick Update
+                </Button>
+                <Button type="submit" disabled={isSubmitting || isPending}>
+                  Save
+                </Button>
+              </div>
             </div>
           </form>
         </FormProvider>
       </CardContent>
+
+      <QuickUpdateModal
+        open={isQuickUpdateOpen}
+        onOpenChange={setIsQuickUpdateOpen}
+        onSave={handleQuickUpdate}
+      />
     </Card>
   );
 }
