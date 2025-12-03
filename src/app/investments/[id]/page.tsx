@@ -21,11 +21,14 @@ interface Props {
 export default async function InvestmentPage({ params, searchParams }: Props) {
   const { id } = params;
   const newInvestment = id === 'new';
-  const page = searchParams.page ? parseInt(searchParams.page) : 1;
-  const pageSize = searchParams.pageSize ? parseInt(searchParams.pageSize) : 25;
-  const [accounts, investment, transactions] = await Promise.all([
+  const investment = newInvestment ? undefined : await getInvestment(id);
+  const page = Math.max(1, parseInt(searchParams.page || '1') || 1);
+  const pageSize = Math.min(
+    100,
+    Math.max(1, parseInt(searchParams.pageSize || '25') || 25)
+  );
+  const [accounts, transactions] = await Promise.all([
     getAccounts(),
-    newInvestment ? Promise.resolve(undefined) : getInvestment(id),
     newInvestment
       ? Promise.resolve({ transactions: [], total: 0 })
       : getInvestmentTransactions(id, (page - 1) * pageSize, pageSize),
