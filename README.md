@@ -26,23 +26,25 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Tasks
 
-- create favicon / logo
-  - https://logo.utities.online/
-- fix empty state - no expense or income
-- add ability to sort expenses, income and retirement on profile page
-- add ability to sort transactions
-- reporting enhancements
-  - investment level reporting
-  - account level reporting
-- add global error page
-- authentication
-  - add auto logout and token refresh
+- basic functionality
+  - create favicon / logo
+    - https://logo.utities.online/
+  - fix empty state - no expense or income
+  - add ability to sort expenses, income and retirement on profile page
+  - add ability to sort transactions
+  - reporting enhancements
+    - investment level reporting
+    - account level reporting
 - project cleanup
+  - add global error page
+  - authentication
+    - add auto logout and token refresh
   - configure linter
   - configure husky
   - add tests for server actions and utility functions
-- Update UI to support mobile devices
-- Add PWA support
-- upgrade to Nextjs 16
-- enable React compiler
-- add AI analysis
+- enhancements
+  - upgrade to Nextjs 16
+  - enable React compiler
+  - Update UI to support mobile devices
+  - Add PWA support
+  - add AI analysis

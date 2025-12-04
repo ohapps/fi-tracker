@@ -10,9 +10,10 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
-import { User, Wallet, TrendingUp, Briefcase } from 'lucide-react';
+import { User, Wallet, DollarSign, ChartCandlestick } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import UserInfo from '../user/UserInfo';
+import { Logo } from '../ui/Logo';
 
 export function AppSidebar() {
   const pathname = usePathname();
@@ -21,7 +22,7 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <div className="px-4 h-14 border-b border-sidebar-border flex items-center gap-2">
-          <h2 className="font-medium">fi-tracker</h2>
+          <Logo />
         </div>
         <SidebarGroup>
           <SidebarMenu>
@@ -31,7 +32,7 @@ export function AppSidebar() {
                 isActive={firstSegment === 'portfolio'}
               >
                 <Link href="/portfolio">
-                  <Briefcase /> Portfolio
+                  <ChartCandlestick /> Portfolio
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -48,7 +49,7 @@ export function AppSidebar() {
                 isActive={firstSegment === 'investments'}
               >
                 <Link href="/investments">
-                  <TrendingUp /> Investments
+                  <DollarSign /> Investments
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
