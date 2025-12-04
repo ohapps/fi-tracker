@@ -26,12 +26,11 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Tasks
 
-- clean up invalid transactions
-- investigate timestamp off by a day issue
-- fix empty state - no expense or income
-- add ability to sort expenses, income and retirement on profile page
 - create favicon / logo
   - https://logo.utities.online/
+- fix empty state - no expense or income
+- add ability to sort expenses, income and retirement on profile page
+- add ability to sort transactions
 - reporting enhancements
   - investment level reporting
   - account level reporting
@@ -46,3 +45,4 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - Add PWA support
 - upgrade to Nextjs 16
 - enable React compiler
+- add AI analysis

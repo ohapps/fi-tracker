@@ -83,28 +83,17 @@
   - other
 
 - transaction types
-
-old types
-GAIN("gain"),
-GAIN_REINVESTED("gain reinvested"),
-LOSS("loss"),
-LOSS_WITHDRAWN("loss withdrawn from investment"),
-PURCHASE_OF_INVESTMENT("purchase of investment"),
-SALE_OF_INVESTMENT("sale of investment"),
-CHANGE_IN_VALUE("change in value"),
-DEBT_REPAYMENT("debt repayment");
-
-- gain
-  - used to measure positive income
-  - no impact to investment metrics
-  - example: rental operating gain
-- loss
-  - used to measure negative income
-  - no impact to investment metrics
-  - example: rental operating loss
-- value change
-  - increase/decrease in asset value
-- cost basis change
-  - increase/decrease in cost basis
-- debt change
-  - increase/decrease in debt
+  - gain
+    - used to measure positive income
+    - no impact to investment metrics
+    - example: rental operating gain
+  - loss
+    - used to measure negative income
+    - no impact to investment metrics
+    - example: rental operating loss
+  - value change
+    - increase/decrease in asset value
+  - cost basis change
+    - increase/decrease in cost basis
+  - debt change
+    - increase/decrease in debt
