@@ -16,7 +16,11 @@ export default async function PortfolioPage() {
   return (
     <div className="p-6 space-y-6">
       <div className="grid gap-4">
-        <FiTracker steps={summary.fiTrackerSteps} />
+        <FiTracker
+          steps={summary.fiTrackerSteps}
+          totalMonthlyIncome={summary.totalMonthlyIncome}
+          totalMonthlyExpenses={summary.totalMonthlyExpenses}
+        />
       </div>
       <div className="grid gap-4 md:grid-cols-3">
         <MonthlySurplusCard

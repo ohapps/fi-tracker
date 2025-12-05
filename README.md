@@ -27,9 +27,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Tasks
 
 - basic functionality
-  - create favicon / logo
-    - https://logo.utities.online/
-  - fix empty state - no expense or income
   - add ability to sort expenses, income and retirement on profile page
   - add ability to sort transactions
   - reporting enhancements
