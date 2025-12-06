@@ -30,3 +30,4 @@ export type Expense = z.infer<typeof ExpenseSchema>;
 export type Income = z.infer<typeof IncomeSchema>;
 export type Retirement = z.infer<typeof RetirementSchema>;
 export type UserProfile = z.infer<typeof UserProfileSchema>;
+export type SortDirection = 'asc' | 'desc';

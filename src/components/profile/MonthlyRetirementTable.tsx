@@ -12,6 +12,7 @@ import {
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { UserProfile } from '@/types/profile';
 import { generateId } from '@/lib/utils';
+import { useTableSort } from '@/hooks/use-table-sort';
 
 interface MonthlyRetirementTableProps {
   methods: UseFormReturn<UserProfile>;
@@ -20,9 +21,14 @@ interface MonthlyRetirementTableProps {
 export function MonthlyRetirementTable({
   methods,
 }: MonthlyRetirementTableProps) {
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, replace } = useFieldArray({
     control: methods.control,
     name: 'retirement',
+  });
+
+  const { handleDisplaySort, getSortIcon } = useTableSort({
+    getData: () => methods.getValues('retirement'),
+    onSort: (sortedData) => replace(sortedData),
   });
 
   const handleAddRetirement = () => {
@@ -38,8 +44,28 @@ export function MonthlyRetirementTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Description</TableHead>
-            <TableHead>Amount</TableHead>
+            <TableHead>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => handleDisplaySort('description')}
+                className="hover:bg-transparent px-0 font-semibold"
+              >
+                Description
+                {getSortIcon('description')}
+              </Button>
+            </TableHead>
+            <TableHead>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => handleDisplaySort('amount')}
+                className="hover:bg-transparent px-0 font-semibold"
+              >
+                Amount
+                {getSortIcon('amount')}
+              </Button>
+            </TableHead>
             <TableHead></TableHead>
           </TableRow>
         </TableHeader>

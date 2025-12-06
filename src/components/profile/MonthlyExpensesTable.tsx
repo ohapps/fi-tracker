@@ -1,3 +1,4 @@
+
 import { Button } from '@/components/ui/button';
 import { Trash } from 'lucide-react';
 import { TextInput } from '@/components/inputs/TextInput';
@@ -12,15 +13,21 @@ import {
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { UserProfile } from '@/types/profile';
 import { generateId } from '@/lib/utils';
+import { useTableSort } from '@/hooks/use-table-sort';
 
 interface MonthlyExpensesTableProps {
   methods: UseFormReturn<UserProfile>;
 }
 
 export function MonthlyExpensesTable({ methods }: MonthlyExpensesTableProps) {
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, replace } = useFieldArray({
     control: methods.control,
     name: 'expenses',
+  });
+
+  const { handleDisplaySort, getSortIcon } = useTableSort({
+    getData: () => methods.getValues('expenses'),
+    onSort: (sortedData) => replace(sortedData),
   });
 
   const handleAddExpense = () => {
@@ -36,8 +43,28 @@ export function MonthlyExpensesTable({ methods }: MonthlyExpensesTableProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Description</TableHead>
-            <TableHead>Amount</TableHead>
+            <TableHead>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => handleDisplaySort('description')}
+                className="hover:bg-transparent px-0 font-semibold"
+              >
+                Description
+                {getSortIcon('description')}
+              </Button>
+            </TableHead>
+            <TableHead>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => handleDisplaySort('amount')}
+                className="hover:bg-transparent px-0 font-semibold"
+              >
+                Amount
+                {getSortIcon('amount')}
+              </Button>
+            </TableHead>
             <TableHead></TableHead>
           </TableRow>
         </TableHeader>
