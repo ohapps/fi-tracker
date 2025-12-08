@@ -15,23 +15,33 @@ import InvestmentTransactionsCard from '@/components/investments/InvestmentTrans
 
 interface Props {
   params: { id: string };
-  searchParams: { page?: string; pageSize?: string };
+  searchParams: { page?: string; pageSize?: string; sortBy?: string; sortDirection?: 'asc' | 'desc' };
 }
 
 export default async function InvestmentPage({ params, searchParams }: Props) {
-  const { id } = params;
+  const { id } = await params;
+  const resolvedSearchParams = await searchParams;
   const newInvestment = id === 'new';
   const investment = newInvestment ? undefined : await getInvestment(id);
-  const page = Math.max(1, parseInt(searchParams.page || '1') || 1);
+  const page = Math.max(1, parseInt(resolvedSearchParams.page || '1') || 1);
   const pageSize = Math.min(
     100,
-    Math.max(1, parseInt(searchParams.pageSize || '25') || 25)
+    Math.max(1, parseInt(resolvedSearchParams.pageSize || '25') || 25)
   );
+  const sortBy = resolvedSearchParams.sortBy || 'transactionDate';
+  const sortDirection = resolvedSearchParams.sortDirection || 'desc';
+
   const [accounts, transactions] = await Promise.all([
     getAccounts(),
     newInvestment
       ? Promise.resolve({ transactions: [], total: 0 })
-      : getInvestmentTransactions(id, (page - 1) * pageSize, pageSize),
+      : getInvestmentTransactions(
+        id,
+        (page - 1) * pageSize,
+        pageSize,
+        sortBy,
+        sortDirection
+      ),
   ]);
 
   return (
@@ -58,6 +68,8 @@ export default async function InvestmentPage({ params, searchParams }: Props) {
           transactions={transactions}
           page={page}
           pageSize={pageSize}
+          sortBy={sortBy}
+          sortDirection={sortDirection}
         />
       )}
     </div>

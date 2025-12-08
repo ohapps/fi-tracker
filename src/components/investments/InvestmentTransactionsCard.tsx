@@ -30,6 +30,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
 interface InvestmentTransactionsCardProps {
   id: string;
   transactions: {
@@ -38,6 +41,8 @@ interface InvestmentTransactionsCardProps {
   };
   page: number;
   pageSize: number;
+  sortBy?: string;
+  sortDirection?: 'asc' | 'desc';
 }
 
 export default function InvestmentTransactionsCard({
@@ -45,27 +50,65 @@ export default function InvestmentTransactionsCard({
   transactions,
   page,
   pageSize,
+  sortBy = 'transactionDate',
+  sortDirection = 'desc',
 }: InvestmentTransactionsCardProps) {
   const router = useRouter();
   const totalPages = Math.ceil(transactions.total / pageSize);
 
+  const handleSort = (key: string) => {
+    let direction: 'asc' | 'desc' = 'asc';
+
+    // Default to desc for amount/date if new sort, or toggle if same
+    if (sortBy !== key && (key === 'amount' || key === 'transactionDate')) {
+      direction = 'desc';
+    } else if (sortBy === key && sortDirection === 'asc') {
+      direction = 'desc';
+    } else if (sortBy === key && sortDirection === 'desc') {
+      direction = 'asc';
+    }
+
+    router.push(
+      `/investments/${id}?page=1&pageSize=${pageSize}&sortBy=${key}&sortDirection=${direction}`
+    );
+  };
+
+  const getSortIcon = (key: string) => {
+    if (sortBy !== key) {
+      return <ArrowUpDown className="ml-2 h-4 w-4" />;
+    }
+    return sortDirection === 'asc' ? (
+      <ArrowUp className="ml-2 h-4 w-4" />
+    ) : (
+      <ArrowDown className="ml-2 h-4 w-4" />
+    );
+  };
+
   const handlePreviousPage = useCallback(() => {
     if (page > 1) {
-      router.push(`/investments/${id}?page=${page - 1}&pageSize=${pageSize}`);
+      router.push(
+        `/investments/${id}?page=${page - 1
+        }&pageSize=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`
+      );
     }
-  }, [page, router, id, pageSize]);
+  }, [page, router, id, pageSize, sortBy, sortDirection]);
 
   const handleNextPage = useCallback(() => {
     if (page < totalPages) {
-      router.push(`/investments/${id}?page=${page + 1}&pageSize=${pageSize}`);
+      router.push(
+        `/investments/${id}?page=${page + 1
+        }&pageSize=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`
+      );
     }
-  }, [page, totalPages, router, id, pageSize]);
+  }, [page, totalPages, router, id, pageSize, sortBy, sortDirection]);
 
   const handlePageSizeChange = useCallback(
     (value: string) => {
-      router.push(`/investments/${id}?page=1&pageSize=${value}`);
+      router.push(
+        `/investments/${id}?page=1&pageSize=${value}&sortBy=${sortBy}&sortDirection=${sortDirection}`
+      );
     },
-    [router, id]
+    [router, id, sortBy, sortDirection]
   );
 
   return (
@@ -78,10 +121,46 @@ export default function InvestmentTransactionsCard({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Date</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Amount</TableHead>
-              <TableHead>Description</TableHead>
+              <TableHead>
+                <Button
+                  variant="ghost"
+                  onClick={() => handleSort('transactionDate')}
+                  className="hover:bg-transparent px-0 font-semibold cursor-pointer"
+                >
+                  Date
+                  {getSortIcon('transactionDate')}
+                </Button>
+              </TableHead>
+              <TableHead>
+                <Button
+                  variant="ghost"
+                  onClick={() => handleSort('type')}
+                  className="hover:bg-transparent px-0 font-semibold cursor-pointer"
+                >
+                  Type
+                  {getSortIcon('type')}
+                </Button>
+              </TableHead>
+              <TableHead>
+                <Button
+                  variant="ghost"
+                  onClick={() => handleSort('amount')}
+                  className="hover:bg-transparent px-0 font-semibold cursor-pointer"
+                >
+                  Amount
+                  {getSortIcon('amount')}
+                </Button>
+              </TableHead>
+              <TableHead>
+                <Button
+                  variant="ghost"
+                  onClick={() => handleSort('description')}
+                  className="hover:bg-transparent px-0 font-semibold cursor-pointer"
+                >
+                  Description
+                  {getSortIcon('description')}
+                </Button>
+              </TableHead>
               <TableHead />
             </TableRow>
           </TableHeader>
