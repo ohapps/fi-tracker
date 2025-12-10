@@ -11,6 +11,10 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
+import { getMonthlyPerformanceData } from '@/server/utils/transaction/get-monthly-performance-data';
+import { getInvestmentMetrics } from '@/server/utils/investment/get-investment-metrics';
+import InvestmentMetricsCard from '@/components/investments/InvestmentMetricsCard';
+import InvestmentPerformanceCard from '@/components/investments/InvestmentPerformanceCard';
 import InvestmentTransactionsCard from '@/components/investments/InvestmentTransactionsCard';
 
 interface Props {
@@ -31,7 +35,7 @@ export default async function InvestmentPage({ params, searchParams }: Props) {
   const sortBy = resolvedSearchParams.sortBy || 'transactionDate';
   const sortDirection = resolvedSearchParams.sortDirection || 'desc';
 
-  const [accounts, transactions] = await Promise.all([
+  const [accounts, transactions, performanceData, metrics] = await Promise.all([
     getAccounts(),
     newInvestment
       ? Promise.resolve({ transactions: [], total: 0 })
@@ -42,6 +46,8 @@ export default async function InvestmentPage({ params, searchParams }: Props) {
         sortBy,
         sortDirection
       ),
+    newInvestment ? Promise.resolve([]) : getMonthlyPerformanceData(id),
+    newInvestment ? Promise.resolve(null) : getInvestmentMetrics(id),
   ]);
 
   return (
@@ -61,17 +67,23 @@ export default async function InvestmentPage({ params, searchParams }: Props) {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <InvestmentForm accounts={accounts} investment={investment} />
-      {!newInvestment && (
-        <InvestmentTransactionsCard
-          id={id}
-          transactions={transactions}
-          page={page}
-          pageSize={pageSize}
-          sortBy={sortBy}
-          sortDirection={sortDirection}
-        />
-      )}
+      <div className="space-y-8">
+        <InvestmentForm accounts={accounts} investment={investment} />
+        {!newInvestment && metrics && <InvestmentMetricsCard metrics={metrics} />}
+        {!newInvestment && performanceData.length > 0 && (
+          <InvestmentPerformanceCard data={performanceData} />
+        )}
+        {!newInvestment && (
+          <InvestmentTransactionsCard
+            id={id}
+            transactions={transactions}
+            page={page}
+            pageSize={pageSize}
+            sortBy={sortBy}
+            sortDirection={sortDirection}
+          />
+        )}
+      </div>
     </div>
   );
 }

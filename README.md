@@ -27,11 +27,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Tasks
 
 - basic functionality
-  - add ability to sort transactions
   - reporting enhancements
-    - investment level reporting
-      - current value + cost basis + debt chart for last 12 months
-      - cash flow chart for last 12 months
     - account level reporting
 - project cleanup
   - add global error page
