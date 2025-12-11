@@ -5,9 +5,15 @@ import EditAccountModal from '@/components/accounts/EditAccountModal';
 import { getAccounts } from '@/server/utils/account/get-accounts';
 import { getInvestments } from '@/server/utils/investment/get-investments';
 
+import { getAccountMetrics } from '@/server/utils/account/get-account-metrics';
+
 export default async function Accounts() {
   const accounts = await getAccounts();
   const investments = await getInvestments();
+  const accountMetrics = await Promise.all(
+    accounts.map((account) => getAccountMetrics(account.id!))
+  );
+
   return (
     <div className="max-w-2xl mx-auto py-8 space-y-6">
       <div className="flex flex-row items-center justify-between">
@@ -15,7 +21,7 @@ export default async function Accounts() {
         <AddAccountButton />
       </div>
       <div className="grid gap-4">
-        {accounts.map((account) => {
+        {accounts.map((account, index) => {
           const accountInvestments = investments.filter(
             (inv) => inv.accountId === account.id
           );
@@ -30,6 +36,7 @@ export default async function Accounts() {
               account={account}
               investmentCount={investmentCount}
               accountValue={accountValue}
+              metrics={accountMetrics[index]}
             />
           );
         })}
