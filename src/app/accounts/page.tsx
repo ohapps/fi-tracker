@@ -15,7 +15,7 @@ export default async function Accounts() {
   );
 
   return (
-    <div className="max-w-2xl mx-auto py-8 space-y-6">
+    <div className="p-6">
       <div className="flex flex-row items-center justify-between">
         <h1 className="text-2xl font-bold mb-4">Accounts</h1>
         <AddAccountButton />

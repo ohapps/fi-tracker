@@ -86,12 +86,14 @@ export async function getInvestmentMetrics(investmentId: string) {
         // Fallback to Lifetime ROI as the 12m period covers the entire life
         roi12m = lifetimeROI;
     }
+    const lifetimeAppreciation = currentValue - currentCostBasis;
 
     return {
         lifetimeROI,
         roi12m,
         lifetimeIncome,
         income12m,
-        avgMonthlyIncome: income12m / 12
+        avgMonthlyIncome: income12m / 12,
+        lifetimeAppreciation
     };
 }

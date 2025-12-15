@@ -10,6 +10,7 @@ interface InvestmentMetricsCardProps {
         lifetimeIncome: number;
         income12m: number;
         avgMonthlyIncome: number;
+        lifetimeAppreciation: number;
     };
 }
 
@@ -22,7 +23,7 @@ export default function InvestmentMetricsCard({
                 <CardTitle>Investment Metrics</CardTitle>
             </CardHeader>
             <CardContent>
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
                     <MetricItem
                         label="Lifetime ROI"
                         value={formatPercent(metrics.lifetimeROI)}
@@ -34,6 +35,11 @@ export default function InvestmentMetricsCard({
                         value={formatPercent(metrics.roi12m)}
                         trend={metrics.roi12m}
                         isPercent
+                    />
+                    <MetricItem
+                        label="Lifetime Appreciation"
+                        value={formatCurrency(metrics.lifetimeAppreciation)}
+                        trend={metrics.lifetimeAppreciation}
                     />
                     <MetricItem
                         label="Lifetime Income"

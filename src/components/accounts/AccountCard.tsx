@@ -17,6 +17,7 @@ interface AccountCardProps {
     lifetimeIncome: number;
     income12m: number;
     avgMonthlyIncome: number;
+    lifetimeAppreciation: number;
   } | null;
 }
 
@@ -29,7 +30,7 @@ export function AccountCard({
   const firstLetter = account.description?.charAt(0)?.toUpperCase() || '?';
 
   return (
-    <Card className="bg-gray-50">
+    <Card className="bg-gray-50 mb-4">
       <CardHeader className="flex flex-row items-center gap-3">
         <Avatar>
           <AvatarFallback>{firstLetter}</AvatarFallback>
@@ -65,7 +66,7 @@ export function AccountCard({
           </div>
         </div>
         {metrics && (
-          <div className="mt-4 pt-4 border-t grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="mt-4 pt-4 border-t grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             <div className="flex flex-col">
               <span className="text-xs text-muted-foreground">ROI (Life)</span>
               <span className={metrics.lifetimeROI >= 0 ? 'text-green-600 font-medium' : 'text-red-600 font-medium'}>
@@ -76,6 +77,12 @@ export function AccountCard({
               <span className="text-xs text-muted-foreground">ROI (12m)</span>
               <span className={metrics.roi12m >= 0 ? 'text-green-600 font-medium' : 'text-red-600 font-medium'}>
                 {formatPercent(metrics.roi12m)}
+              </span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xs text-muted-foreground">Appreciation (Life)</span>
+              <span className={metrics.lifetimeAppreciation >= 0 ? 'text-green-600 font-medium' : 'text-red-600 font-medium'}>
+                {formatCurrency(metrics.lifetimeAppreciation)}
               </span>
             </div>
             <div className="flex flex-col">

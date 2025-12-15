@@ -118,11 +118,14 @@ export async function getAccountMetrics(accountId: string) {
         roi12m = lifetimeROI;
     }
 
+    const lifetimeAppreciation = currentValue - currentCostBasis;
+
     return {
         lifetimeROI,
         roi12m,
         lifetimeIncome,
         income12m,
-        avgMonthlyIncome: income12m / 12
+        avgMonthlyIncome: income12m / 12,
+        lifetimeAppreciation
     };
 }
