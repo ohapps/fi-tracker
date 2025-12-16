@@ -27,8 +27,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Tasks
 
 - project cleanup
-  - add global error page
-  - add global loading page
   - authentication
     - add auto logout and token refresh
   - configure linter

@@ -73,6 +73,7 @@ The project follows the standard Next.js `src` directory structure:
 2.  **Check Dependencies:** Review `package.json` before suggesting new libraries. Use what is already installed.
 3.  **Follow Patterns:** Match the coding style of existing files.
 4.  **Verification:** When modifying code, verify that the changes render correctly and do not introduce type errors.
+5.  **Build Sparingly:** Do NOT run `npm run build` or `yarn build` after every minor change on files. This project uses `yarn dev`, which provides hot module replacement. Only run a full build if you are verifying a complex change or before major checkpoints. Rely on type checking and the dev server status to ensure code correctness.
 
 ## 5. Common Patterns
 
