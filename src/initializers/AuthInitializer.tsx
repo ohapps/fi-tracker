@@ -1,3 +1,4 @@
+import { SessionMonitor } from '@/components/auth/SessionMonitor';
 import { auth0 } from '@/server/security/auth0';
 import { redirect } from 'next/navigation';
 
@@ -13,5 +14,10 @@ export default async function AuthInitializer({
     redirect('/auth/login');
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <SessionMonitor />
+      {children}
+    </>
+  );
 }

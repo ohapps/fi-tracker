@@ -30,8 +30,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
   - authentication
     - add auto logout and token refresh
   - configure linter
-  - configure husky
   - add tests for server actions and utility functions
+  - configure husky
   - add gitlab pipelines to run tests and lint
   - add AI MR reviews - https://www.coderabbit.ai/
 - enhancements

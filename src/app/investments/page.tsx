@@ -20,9 +20,10 @@ export default async function Investments({
   const accounts: Account[] = await getAccounts();
 
   // Get accountId from search params
+  const resolvedSearchParams = await searchParams;
   const accountId =
-    typeof searchParams?.accountId === 'string'
-      ? searchParams.accountId
+    typeof resolvedSearchParams?.accountId === 'string'
+      ? resolvedSearchParams.accountId
       : undefined;
 
   // Filter accounts and investments if accountId is present
