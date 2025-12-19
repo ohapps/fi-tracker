@@ -75,7 +75,14 @@ The project follows the standard Next.js `src` directory structure:
 4.  **Verification:** When modifying code, verify that the changes render correctly and do not introduce type errors.
 5.  **Build Sparingly:** Do NOT run `npm run build` or `yarn build` after every minor change on files. This project uses `yarn dev`, which provides hot module replacement. Only run a full build if you are verifying a complex change or before major checkpoints. Rely on type checking and the dev server status to ensure code correctness.
 
-## 5. Common Patterns
+## 5. Testing
+
+- **Testing Framework:** [Vitest](https://vitest.dev/)
+- **Co-location:** All test files must be created in the same directory as the source file they are testing.
+- **Naming Convention:** Test files should use the `.test.ts` or `.test.tsx` suffix (e.g., `update-user.ts` should have `update-user.test.ts` in the same folder).
+- **Mocks:** Use `vi.mocked()` and `Awaited<ReturnType<typeof ...>>` for type-safe mocking of async functions to avoid TypeScript errors and `any` casts.
+
+## 6. Common Patterns
 
 ### Creating a New UI Component
 
