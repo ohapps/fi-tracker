@@ -26,8 +26,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Tasks
 
-- project cleanup
-  - add AI MR reviews - https://www.coderabbit.ai/
 - enhancements
   - upgrade to Nextjs 16
   - enable React compiler
