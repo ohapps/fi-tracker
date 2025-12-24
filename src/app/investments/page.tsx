@@ -10,12 +10,10 @@ import Link from 'next/link';
 import { X } from 'lucide-react';
 
 interface InvestmentsPageProps {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function Investments({
-  searchParams,
-}: InvestmentsPageProps) {
+export default async function Investments({ searchParams }: InvestmentsPageProps) {
   const investments: Investment[] = await getInvestments();
   const accounts: Account[] = await getAccounts();
 
@@ -27,9 +25,7 @@ export default async function Investments({
       : undefined;
 
   // Filter accounts and investments if accountId is present
-  const filteredAccounts = accountId
-    ? accounts.filter((acc) => acc.id === accountId)
-    : accounts;
+  const filteredAccounts = accountId ? accounts.filter((acc) => acc.id === accountId) : accounts;
   const filteredInvestments = accountId
     ? investments.filter((inv) => inv.accountId === accountId)
     : investments;
@@ -50,16 +46,8 @@ export default async function Investments({
     <div className="p-6">
       {accountId && (
         <div>
-          <Button
-            asChild
-            variant="link"
-            className="px-0"
-            title="Clear account filter"
-          >
-            <Link
-              href="/investments"
-              className="inline-flex items-center gap-0"
-            >
+          <Button asChild variant="link" className="px-0" title="Clear account filter">
+            <Link href="/investments" className="inline-flex items-center gap-0">
               <X className="w-4 h-4" />
               Clear Account Filter
             </Link>
@@ -78,9 +66,7 @@ export default async function Investments({
         if (investmentsForAccount.length === 0) return null;
         return (
           <div key={accId} className="mb-8">
-            <h2 className="text-lg font-semibold mb-2">
-              {account.description}
-            </h2>
+            <h2 className="text-lg font-semibold mb-2">{account.description}</h2>
             <Separator className="mb-4" />
             <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
               {investmentsForAccount.map((inv: Investment) => (
