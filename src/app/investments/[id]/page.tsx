@@ -18,8 +18,13 @@ import InvestmentPerformanceCard from '@/components/investments/InvestmentPerfor
 import InvestmentTransactionsCard from '@/components/investments/InvestmentTransactionsCard';
 
 interface Props {
-  params: { id: string };
-  searchParams: { page?: string; pageSize?: string; sortBy?: string; sortDirection?: 'asc' | 'desc' };
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{
+    page?: string;
+    pageSize?: string;
+    sortBy?: string;
+    sortDirection?: 'asc' | 'desc';
+  }>;
 }
 
 export default async function InvestmentPage({ params, searchParams }: Props) {
@@ -39,13 +44,7 @@ export default async function InvestmentPage({ params, searchParams }: Props) {
     getAccounts(),
     newInvestment
       ? Promise.resolve({ transactions: [], total: 0 })
-      : getInvestmentTransactions(
-        id,
-        (page - 1) * pageSize,
-        pageSize,
-        sortBy,
-        sortDirection
-      ),
+      : getInvestmentTransactions(id, (page - 1) * pageSize, pageSize, sortBy, sortDirection),
     newInvestment ? Promise.resolve([]) : getMonthlyPerformanceData(id),
     newInvestment ? Promise.resolve(null) : getInvestmentMetrics(id),
   ]);
@@ -61,9 +60,7 @@ export default async function InvestmentPage({ params, searchParams }: Props) {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>
-              {newInvestment ? 'New Investment' : 'Edit Investment'}
-            </BreadcrumbPage>
+            <BreadcrumbPage>{newInvestment ? 'New Investment' : 'Edit Investment'}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
