@@ -17,16 +17,20 @@ export default function PortfolioCashReserveCard({
         <DollarSign className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">
+        <div
+          className="text-xl sm:text-2xl font-bold truncate"
+          title={`$${totalCashReserve.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}`}
+        >
           $
           {totalCashReserve.toLocaleString(undefined, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           })}
         </div>
-        <p className="text-xs text-muted-foreground">
-          {monthsOfReserves} months of reserves
-        </p>
+        <p className="text-xs text-muted-foreground">{monthsOfReserves} months of reserves</p>
       </CardContent>
     </Card>
   );

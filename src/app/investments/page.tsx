@@ -68,7 +68,7 @@ export default async function Investments({ searchParams }: InvestmentsPageProps
           <div key={accId} className="mb-8">
             <h2 className="text-lg font-semibold mb-2">{account.description}</h2>
             <Separator className="mb-4" />
-            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+            <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               {investmentsForAccount.map((inv: Investment) => (
                 <InvestmentCard key={inv.id} investment={inv} />
               ))}
@@ -79,7 +79,7 @@ export default async function Investments({ searchParams }: InvestmentsPageProps
       {noAccount.length > 0 && !accountId && (
         <div className="mb-8">
           <h2 className="text-lg font-semibold mb-2">No Account</h2>
-          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {noAccount.map((inv) => (
               <InvestmentCard key={inv.id} investment={inv} />
             ))}

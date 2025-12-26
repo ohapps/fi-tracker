@@ -12,22 +12,22 @@ interface Props {
 export default function MonthlySurplusCard({
   totalMonthlyIncome,
   totalMonthlyExpenses,
-  incomeExpenseDifference
+  incomeExpenseDifference,
 }: Props) {
-  const expenseToIncomeRate = totalMonthlyIncome > 0
-    ? (totalMonthlyExpenses / totalMonthlyIncome) * 100
-    : 0;
+  const expenseToIncomeRate =
+    totalMonthlyIncome > 0 ? (totalMonthlyExpenses / totalMonthlyIncome) * 100 : 0;
 
   return (
     <Card className="bg-gray-50">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium">
-          Monthly Surplus
-        </CardTitle>
+        <CardTitle className="text-sm font-medium">Monthly Surplus</CardTitle>
         <ChartNoAxesCombined className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">
+        <div
+          className="text-xl sm:text-2xl font-bold truncate"
+          title={formatCurrency(incomeExpenseDifference)}
+        >
           {formatCurrency(incomeExpenseDifference)}
         </div>
         <div className="mt-1 mb-2">
