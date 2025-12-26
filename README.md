@@ -27,6 +27,5 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Tasks
 
 - enhancements
-  - Update UI to support mobile devices
   - Add PWA support
   - add AI analysis

@@ -5,9 +5,7 @@ interface PortfolioEquityCardProps {
   equity: number;
 }
 
-export default function PortfolioEquityCard({
-  equity,
-}: PortfolioEquityCardProps) {
+export default function PortfolioEquityCard({ equity }: PortfolioEquityCardProps) {
   return (
     <Card className="bg-gray-50">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -15,7 +13,13 @@ export default function PortfolioEquityCard({
         <Scale className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">
+        <div
+          className="text-xl sm:text-2xl font-bold truncate"
+          title={`$${equity.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}`}
+        >
           $
           {equity.toLocaleString(undefined, {
             minimumFractionDigits: 2,
