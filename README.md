@@ -27,5 +27,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Tasks
 
 - enhancements
-  - Add PWA support
+  - [x] Add PWA support
   - add AI analysis
+  - add offline support
+  - add Sentry configuration
