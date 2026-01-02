@@ -37,10 +37,7 @@ export default function MonthlyIncomeChart({ data }: MonthlyIncomeChartProps) {
       <CardContent>
         <div className="h-[400px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={chartData}
-              margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-            >
+            <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <ReferenceLine y={0} stroke="#666666" strokeDasharray="3 3" />
               <XAxis
@@ -55,8 +52,8 @@ export default function MonthlyIncomeChart({ data }: MonthlyIncomeChartProps) {
                 tickFormatter={(value) => `$${value.toLocaleString()}`}
               />
               <Tooltip
-                formatter={(value: number) => [
-                  `$${value.toLocaleString()}`,
+                formatter={(value: number | string | undefined) => [
+                  `$${Number(value).toLocaleString()}`,
                   'Income',
                 ]}
                 labelFormatter={(label) => `Month: ${label}`}
