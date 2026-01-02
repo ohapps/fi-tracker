@@ -10,7 +10,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
-import { User, Wallet, DollarSign, ChartCandlestick } from 'lucide-react';
+import { User, Wallet, DollarSign, ChartCandlestick, Sparkles } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import UserInfo from '../user/UserInfo';
 import { Logo } from '../ui/Logo';
@@ -27,10 +27,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton
-                asChild
-                isActive={firstSegment === 'portfolio'}
-              >
+              <SidebarMenuButton asChild isActive={firstSegment === 'portfolio'}>
                 <Link href="/portfolio">
                   <ChartCandlestick /> Portfolio
                 </Link>
@@ -44,10 +41,7 @@ export function AppSidebar() {
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton
-                asChild
-                isActive={firstSegment === 'investments'}
-              >
+              <SidebarMenuButton asChild isActive={firstSegment === 'investments'}>
                 <Link href="/investments">
                   <DollarSign /> Investments
                 </Link>
@@ -57,6 +51,13 @@ export function AppSidebar() {
               <SidebarMenuButton asChild isActive={firstSegment === 'profile'}>
                 <Link href="/profile">
                   <User /> Profile
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild isActive={firstSegment === 'analyze'}>
+                <Link href="/analyze">
+                  <Sparkles /> Analyze
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
