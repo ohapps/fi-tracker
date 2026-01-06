@@ -5,45 +5,27 @@ import { useTransition, useEffect } from 'react';
 import { Button } from '../ui/button';
 import { TextInput } from '../inputs/TextInput';
 import { toast } from 'sonner';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogClose,
-} from '../ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '../ui/dialog';
 import { useAtom } from 'jotai';
 import { transactionActionAtom } from '@/atoms/transaction';
 import { DatePicker } from '../inputs/DatePicker';
 import { SelectInput } from '../inputs/SelectInput';
-import {
-  Transaction,
-  TransactionSchema,
-  TransactionType,
-} from '@/types/investments';
+import { Transaction, TransactionSchema, TransactionType } from '@/types/investments';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { saveTransaction } from '@/server/actions/transactions/save-transaction';
 
-export default function EditTransactionModal({
-  investmentId,
-}: {
-  investmentId: string;
-}) {
+export default function EditTransactionModal({ investmentId }: { investmentId: string }) {
   const [isPending, startTransition] = useTransition();
-  const [transactionAction, setTransactionAction] = useAtom(
-    transactionActionAtom
-  );
-  const open =
-    transactionAction?.action === 'edit' || transactionAction?.action === 'add';
-  const title =
-    transactionAction?.action === 'edit'
-      ? 'Edit Transaction'
-      : 'Add New Transaction';
+  const [transactionAction, setTransactionAction] = useAtom(transactionActionAtom);
+  const open = transactionAction?.action === 'edit' || transactionAction?.action === 'add';
+  const title = transactionAction?.action === 'edit' ? 'Edit Transaction' : 'Add New Transaction';
 
   const methods = useForm<Transaction>({
     resolver: zodResolver(TransactionSchema),
     mode: 'onChange',
   });
+
+  const { reset } = methods;
 
   const submitDisabled = isPending || !methods.formState.isValid;
 
@@ -66,10 +48,12 @@ export default function EditTransactionModal({
   };
 
   useEffect(() => {
+    if (!open) return;
+
     if (transactionAction?.action === 'edit' && transactionAction.transaction) {
-      methods.reset(transactionAction.transaction);
-    } else {
-      methods.reset({
+      reset(transactionAction.transaction);
+    } else if (transactionAction?.action === 'add') {
+      reset({
         id: '',
         investmentId,
         transactionDate: new Date(),
@@ -78,7 +62,7 @@ export default function EditTransactionModal({
         description: '',
       });
     }
-  }, [transactionAction, methods, investmentId]);
+  }, [open, transactionAction, investmentId, reset]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -87,10 +71,7 @@ export default function EditTransactionModal({
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
         <FormProvider {...methods}>
-          <form
-            onSubmit={methods.handleSubmit(onSubmit)}
-            className="flex flex-col gap-4 mt-4"
-          >
+          <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-4 mt-4">
             <DatePicker name="transactionDate" label="Transaction Date" />
             <SelectInput
               name="type"
