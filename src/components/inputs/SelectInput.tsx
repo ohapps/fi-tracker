@@ -1,6 +1,6 @@
 'use client';
 
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, Controller } from 'react-hook-form';
 import {
   Select,
   SelectContent,
@@ -19,40 +19,42 @@ interface SelectInputProps {
 }
 
 export function SelectInput({ name, label, options }: SelectInputProps) {
-  const { watch, setValue } = useFormContext();
+  const { control } = useFormContext();
   return (
     <div className="p-2">
       <Label htmlFor={name} className="pb-2">
         {label}
       </Label>
-      <Select
-        value={watch(name) || ''}
-        onValueChange={(value) => setValue(name, value)}
+      <Controller
         name={name}
-      >
-        <SelectTrigger className="w-full bg-white">
-          <SelectValue placeholder={`Select ${label.toLowerCase()}`} />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            {options.map((option) => {
-              if (typeof option === 'string') {
-                return (
-                  <SelectItem key={option} value={option}>
-                    {option.charAt(0).toUpperCase() + option.slice(1)}
-                  </SelectItem>
-                );
-              } else {
-                return (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                );
-              }
-            })}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+        control={control}
+        render={({ field }) => (
+          <Select value={field.value || ''} onValueChange={field.onChange} name={field.name}>
+            <SelectTrigger className="w-full bg-white">
+              <SelectValue placeholder={`Select ${label.toLowerCase()}`} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {options.map((option) => {
+                  if (typeof option === 'string') {
+                    return (
+                      <SelectItem key={option} value={option}>
+                        {option.charAt(0).toUpperCase() + option.slice(1)}
+                      </SelectItem>
+                    );
+                  } else {
+                    return (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    );
+                  }
+                })}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        )}
+      />
     </div>
   );
 }

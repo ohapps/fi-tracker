@@ -12,5 +12,10 @@ export default defineConfig({
       MONGODB_URI: 'mongodb://localhost:27017/test',
       MONGODB_DATABASE: 'test',
     },
+    server: {
+      deps: {
+        inline: ['html-encoding-sniffer', '@exodus/bytes'],
+      },
+    },
   },
 });

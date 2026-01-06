@@ -70,10 +70,13 @@ The project follows the standard Next.js `src` directory structure:
 ## 4. Workflow for Agents
 
 1.  **Explore First:** Before creating new components, check `src/components/ui` to see if a suitable primitive exists.
-2.  **Check Dependencies:** Review `package.json` before suggesting new libraries. Use what is already installed.
-3.  **Follow Patterns:** Match the coding style of existing files.
-4.  **Verification:** When modifying code, verify that the changes render correctly and do not introduce type errors.
-5.  **Build Sparingly:** Do NOT run `npm run build` or `yarn build` after every minor change on files. This project uses `yarn dev`, which provides hot module replacement. Only run a full build if you are verifying a complex change or before major checkpoints. Rely on type checking and the dev server status to ensure code correctness.
+2.  **Dependency Management:** Use **Yarn** exclusively for all dependency management and scripts. Do NOT use `npm` or `pnpm`.
+    - To add dependencies: `yarn add <package>`
+    - To run scripts: `yarn <command>`
+3.  **Check Dependencies:** Review `package.json` before suggesting new libraries. Use what is already installed.
+4.  **Follow Patterns:** Match the coding style of existing files.
+5.  **Verification:** When modifying code, verify that the changes render correctly and do not introduce type errors.
+6.  **Build Sparingly:** Do NOT run `yarn build` after every minor change on files. This project uses `yarn dev`, which provides hot module replacement. Only run a full build if you are verifying a complex change or before major checkpoints. Rely on type checking and the dev server status to ensure code correctness.
 
 ## 5. Testing
 
