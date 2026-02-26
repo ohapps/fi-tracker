@@ -12,19 +12,19 @@ import { Account } from '@/types/accounts';
 import { useTransition } from 'react';
 import { saveInvestment } from '@/server/actions/investments/save-investment';
 import { toast } from 'sonner';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { QuickUpdateModal } from './QuickUpdateModal';
 import { useState } from 'react';
+import { useSWRConfig } from 'swr';
+import { useIsOffline } from '@/hooks/use-is-offline';
 
 interface InvestmentFormProps {
   investment?: Investment;
   accounts: Account[];
 }
 
-export default function InvestmentForm({
-  investment,
-  accounts,
-}: InvestmentFormProps) {
+export default function InvestmentForm({ investment, accounts }: InvestmentFormProps) {
+  const isOffline = useIsOffline();
   const [isPending, startTransition] = useTransition();
   const methods = useForm<Investment>({
     resolver: zodResolver(InvestmentSchema),
@@ -41,6 +41,7 @@ export default function InvestmentForm({
   const [isQuickUpdateOpen, setIsQuickUpdateOpen] = useState(false);
 
   const handleQuickUpdate = (type: string, amount: number) => {
+    if (isOffline) return;
     const currentVal = getValues('currentValue') || 0;
     const currentCost = getValues('costBasis') || 0;
 
@@ -54,13 +55,25 @@ export default function InvestmentForm({
     handleSubmit(onSubmit)();
   };
 
+  const router = useRouter();
+  const { mutate } = useSWRConfig();
   const onSubmit = (data: Investment) => {
+    if (isOffline) return;
     startTransition(async () => {
       const result = await saveInvestment(data);
       if (result.success) {
         toast.success('Investment Saved');
+
+        // Invalidate relevant caches
+        mutate('/api/investments');
+        mutate('/api/accounts');
+        mutate('/api/portfolio');
+
+        // Force Next.js to refresh the router cache
+        router.refresh();
+
         if (!investment?.id && result.data) {
-          redirect(`/investments/${result.data}`);
+          router.push(`/investments/${result.data}`);
         }
       } else {
         toast.error('Failed to save investment');
@@ -99,30 +112,15 @@ export default function InvestmentForm({
                 />
               </div>
               <div>
-                <TextInput
-                  name="currentValue"
-                  type="currency"
-                  label="Current Value"
-                />
-                <TextInput
-                  name="costBasis"
-                  type="currency"
-                  label="Cost Basis"
-                />
-                <TextInput
-                  name="currentDebt"
-                  type="currency"
-                  label="Current Debt"
-                />
+                <TextInput name="currentValue" type="currency" label="Current Value" />
+                <TextInput name="costBasis" type="currency" label="Cost Basis" />
+                <TextInput name="currentDebt" type="currency" label="Current Debt" />
               </div>
             </div>
             <div className="flex items-center justify-between">
               <div className="text-sm text-muted-foreground">
                 {investment?.updatedAt && (
-                  <>
-                    Last updated:{' '}
-                    {new Date(investment.updatedAt).toLocaleString()}
-                  </>
+                  <>Last updated: {new Date(investment.updatedAt).toLocaleString()}</>
                 )}
               </div>
               <div className="flex gap-2">
@@ -130,12 +128,12 @@ export default function InvestmentForm({
                   type="button"
                   variant="outline"
                   onClick={() => setIsQuickUpdateOpen(true)}
-                  disabled={isSubmitting || isPending}
+                  disabled={isSubmitting || isPending || isOffline}
                 >
-                  Quick Update
+                  {isOffline ? 'Offline' : 'Quick Update'}
                 </Button>
-                <Button type="submit" disabled={isSubmitting || isPending}>
-                  Save
+                <Button type="submit" disabled={isSubmitting || isPending || isOffline}>
+                  {isPending ? 'Saving...' : isOffline ? 'Offline' : 'Save'}
                 </Button>
               </div>
             </div>

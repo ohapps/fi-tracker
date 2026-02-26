@@ -15,7 +15,10 @@ import { usePathname } from 'next/navigation';
 import UserInfo from '../user/UserInfo';
 import { Logo } from '../ui/Logo';
 
+import { useIsOffline } from '@/hooks/use-is-offline';
+
 export function AppSidebar() {
+  const isOffline = useIsOffline();
   const pathname = usePathname();
   const firstSegment = pathname.replace(/^\/|\/$/g, '').split('/')[0] || '';
   return (
@@ -55,9 +58,14 @@ export function AppSidebar() {
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive={firstSegment === 'analyze'}>
-                <Link href="/analyze">
-                  <Sparkles /> Analyze
+              <SidebarMenuButton
+                asChild
+                isActive={firstSegment === 'analyze'}
+                disabled={isOffline}
+                className={isOffline ? 'opacity-50 grayscale' : ''}
+              >
+                <Link href="/analyze" onClick={(e) => isOffline && e.preventDefault()}>
+                  <Sparkles /> Analyze {isOffline && '(Offline)'}
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>

@@ -6,6 +6,7 @@ import { AppSidebar } from '@/components/app/AppSidebar';
 import { AppHeader } from '@/components/app/AppHeader';
 import AppInitializer from '@/initializers/AppInitializer';
 import { Toaster } from '@/components/ui/sonner';
+import PwaRegistration from '@/components/pwa/PwaRegistration';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -48,6 +49,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <AppInitializer>
+          <PwaRegistration />
           <SidebarProvider>
             <div className="flex h-screen w-full">
               <AppSidebar />

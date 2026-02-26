@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { EditAccountMenu } from './EditAccountMenu';
 import { Coins, LineChart, ArrowUpRight } from 'lucide-react';
-import { Account } from '@/types/accounts';
+import { Account, AccountMetrics } from '@/types/accounts';
 import Link from 'next/link';
 import { formatCurrency } from '@/utils/currency-utils';
 import { formatPercent } from '@/utils/number-utils';
@@ -11,14 +11,7 @@ interface AccountCardProps {
   account: Account;
   investmentCount?: number;
   accountValue?: number;
-  metrics?: {
-    lifetimeROI: number;
-    roi12m: number;
-    lifetimeIncome: number;
-    income12m: number;
-    avgMonthlyIncome: number;
-    lifetimeAppreciation: number;
-  } | null;
+  metrics?: AccountMetrics | null;
 }
 
 export function AccountCard({
@@ -43,9 +36,7 @@ export function AccountCard({
           <div className="flex items-center gap-2">
             <Coins className="w-4 h-4 text-muted-foreground" />
             Investments:{' '}
-            <span className="font-semibold text-muted-foreground">
-              {investmentCount}
-            </span>
+            <span className="font-semibold text-muted-foreground">{investmentCount}</span>
             {investmentCount > 0 && (
               <Link
                 href={`/investments?accountId=${account.id}`}
@@ -69,44 +60,53 @@ export function AccountCard({
           <div className="mt-4 pt-4 border-t grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             <div className="flex flex-col">
               <span className="text-xs text-muted-foreground">ROI (Life)</span>
-              <span className={metrics.lifetimeROI >= 0 ? 'text-green-600 font-medium' : 'text-red-600 font-medium'}>
+              <span
+                className={
+                  metrics.lifetimeROI >= 0
+                    ? 'text-green-600 font-medium'
+                    : 'text-red-600 font-medium'
+                }
+              >
                 {formatPercent(metrics.lifetimeROI)}
               </span>
             </div>
             <div className="flex flex-col">
               <span className="text-xs text-muted-foreground">ROI (12m)</span>
-              <span className={metrics.roi12m >= 0 ? 'text-green-600 font-medium' : 'text-red-600 font-medium'}>
+              <span
+                className={
+                  metrics.roi12m >= 0 ? 'text-green-600 font-medium' : 'text-red-600 font-medium'
+                }
+              >
                 {formatPercent(metrics.roi12m)}
               </span>
             </div>
             <div className="flex flex-col">
               <span className="text-xs text-muted-foreground">Appreciation (Life)</span>
-              <span className={metrics.lifetimeAppreciation >= 0 ? 'text-green-600 font-medium' : 'text-red-600 font-medium'}>
+              <span
+                className={
+                  metrics.lifetimeAppreciation >= 0
+                    ? 'text-green-600 font-medium'
+                    : 'text-red-600 font-medium'
+                }
+              >
                 {formatCurrency(metrics.lifetimeAppreciation)}
               </span>
             </div>
             <div className="flex flex-col">
               <span className="text-xs text-muted-foreground">Income (Life)</span>
-              <span className="font-medium">
-                {formatCurrency(metrics.lifetimeIncome)}
-              </span>
+              <span className="font-medium">{formatCurrency(metrics.lifetimeIncome)}</span>
             </div>
             <div className="flex flex-col">
               <span className="text-xs text-muted-foreground">Income (12m)</span>
-              <span className="font-medium">
-                {formatCurrency(metrics.income12m)}
-              </span>
+              <span className="font-medium">{formatCurrency(metrics.income12m)}</span>
             </div>
             <div className="flex flex-col">
               <span className="text-xs text-muted-foreground">Avg Income/Mo</span>
-              <span className="font-medium">
-                {formatCurrency(metrics.avgMonthlyIncome)}
-              </span>
+              <span className="font-medium">{formatCurrency(metrics.avgMonthlyIncome)}</span>
             </div>
           </div>
         )}
-
-      </CardContent >
-    </Card >
+      </CardContent>
+    </Card>
   );
 }

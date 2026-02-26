@@ -1,4 +1,5 @@
-import { calculatePortfolioSummary } from '@/server/utils/portfolio/calculate-portfolio-summary';
+'use client';
+
 import PortfolioValueCard from '@/components/portfolio/PortfolioValueCard';
 import PortfolioEquityCard from '@/components/portfolio/PortfolioEquityCard';
 import PortfolioCashReserveCard from '@/components/portfolio/PortfolioCashReserveCard';
@@ -9,9 +10,47 @@ import { FiTracker } from '@/components/portfolio/FiTracker';
 import MonthlySurplusCard from '@/components/portfolio/MonthlySurplusCard';
 import PassiveIncomeCard from '@/components/portfolio/PassiveIncomeCard';
 import RetirementIncomeCard from '@/components/portfolio/RetirementIncomeCard';
+import useSWR from 'swr';
+import { fetcher } from '@/utils/fetcher';
+import { Skeleton } from '@/components/ui/skeleton';
 
-export default async function PortfolioPage() {
-  const summary = await calculatePortfolioSummary();
+export default function PortfolioPage() {
+  const { data, error, isLoading } = useSWR('/api/portfolio', fetcher);
+
+  if (error && !data) {
+    return (
+      <div className="p-6">
+        <div className="text-red-500">
+          Failed to load portfolio summary. Please try again later.
+        </div>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="p-6 space-y-6">
+        <Skeleton className="h-64 w-full rounded-xl" />
+        <div className="grid gap-4 md:grid-cols-3">
+          <Skeleton className="h-40 rounded-xl" />
+          <Skeleton className="h-40 rounded-xl" />
+          <Skeleton className="h-40 rounded-xl" />
+        </div>
+        <div className="grid gap-4 md:grid-cols-3">
+          <Skeleton className="h-40 rounded-xl" />
+          <Skeleton className="h-40 rounded-xl" />
+          <Skeleton className="h-40 rounded-xl" />
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Skeleton className="h-80 rounded-xl" />
+          <Skeleton className="h-80 rounded-xl" />
+        </div>
+      </div>
+    );
+  }
+
+  const summary = data?.summary;
+  if (!summary) return null;
 
   return (
     <div className="p-6 space-y-6">
