@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useSetAtom } from 'jotai';
 import { authAtom } from '@/atoms/auth';
 
-const SESSION_CHECK_INTERVAL_MS = 60 * 5000; // Check every 60 seconds
+const SESSION_CHECK_INTERVAL_MS = 5 * 60 * 1000; // Check every 5 minutes
 
 export function SessionMonitor() {
   const router = useRouter();
