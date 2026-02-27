@@ -37,6 +37,12 @@ The project follows the standard Next.js `src` directory structure:
 - **No `any`:** Avoid using `any`. Use `unknown` if necessary, but prefer specific types.
 - **Variable Declarations:** Always prefer `const`. Only use `let` if you absolutely must reassign the variable. Avoid `var` entirely.
 
+### Import Guidelines
+
+- **Top of File:** Always place all `import` statements at the very top of the file, above any function definitions, constants, or logic.
+- **Organization:** Group imports by type (e.g., standard libraries, third-party libraries, local components/utils).
+- **Naming:** Prefer named imports unless a default export is specifically required.
+
 ### Components
 
 - **Functional Components:** Use React Functional Components.

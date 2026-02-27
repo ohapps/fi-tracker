@@ -13,8 +13,13 @@ import { SelectInput } from '../inputs/SelectInput';
 import { Transaction, TransactionSchema, TransactionType } from '@/types/investments';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { saveTransaction } from '@/server/actions/transactions/save-transaction';
+import { useSWRConfig } from 'swr';
+import { useRouter } from 'next/navigation';
+import { useIsOffline } from '@/hooks/use-is-offline';
 
 export default function EditTransactionModal({ investmentId }: { investmentId: string }) {
+  const isOffline = useIsOffline();
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [transactionAction, setTransactionAction] = useAtom(transactionActionAtom);
   const open = transactionAction?.action === 'edit' || transactionAction?.action === 'add';
@@ -27,13 +32,22 @@ export default function EditTransactionModal({ investmentId }: { investmentId: s
 
   const { reset } = methods;
 
-  const submitDisabled = isPending || !methods.formState.isValid;
+  const submitDisabled = isPending || !methods.formState.isValid || isOffline;
 
+  const { mutate } = useSWRConfig();
   const onSubmit = (data: Transaction) => {
+    if (isOffline) return;
     startTransition(async () => {
       const result = await saveTransaction(data);
       if (result.success) {
         toast.success('Transaction Saved');
+
+        // Invalidate relevant caches
+        mutate('/api/investments');
+        mutate('/api/accounts');
+        mutate('/api/portfolio');
+        router.refresh();
+
         setTransactionAction(undefined);
       } else {
         toast.error('Failed to save transaction');
@@ -91,7 +105,7 @@ export default function EditTransactionModal({ investmentId }: { investmentId: s
                 </Button>
               </DialogClose>
               <Button type="submit" disabled={submitDisabled}>
-                {isPending ? 'Saving...' : 'Save'}
+                {isPending ? 'Saving...' : isOffline ? 'Offline' : 'Save'}
               </Button>
             </div>
           </form>

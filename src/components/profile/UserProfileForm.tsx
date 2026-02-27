@@ -14,12 +14,17 @@ import { MonthlyExpensesTable } from './MonthlyExpensesTable';
 import { TextInput } from '../inputs/TextInput';
 import { MonthlyIncomeTable } from './MonthlyIncomeTable';
 import { MonthlyRetirementTable } from './MonthlyRetirementTable';
+import { useSWRConfig } from 'swr';
+import { useRouter } from 'next/navigation';
+import { useIsOffline } from '@/hooks/use-is-offline';
 
 interface UserProfileFormProps {
   userProfile: UserProfile;
 }
 
 export default function UserProfileForm({ userProfile }: UserProfileFormProps) {
+  const isOffline = useIsOffline();
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const methods = useForm<UserProfile>({
@@ -27,11 +32,16 @@ export default function UserProfileForm({ userProfile }: UserProfileFormProps) {
     defaultValues: userProfile,
   });
 
+  const { mutate } = useSWRConfig();
   const onSubmit = (data: UserProfile) => {
+    if (isOffline) return;
     startTransition(async () => {
       const result = await updateUserAction(data);
       if (result.success) {
         toast.success('Profile updated successfully');
+        mutate('/api/profile');
+        mutate('/api/portfolio');
+        router.refresh();
       } else {
         toast.error('Failed to update profile');
       }
@@ -66,28 +76,19 @@ export default function UserProfileForm({ userProfile }: UserProfileFormProps) {
               <CardContent>
                 <Tabs defaultValue="expenses" className="w-full">
                   <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger
-                      value="expenses"
-                      className="data-[state=active]:bg-blue-100"
-                    >
+                    <TabsTrigger value="expenses" className="data-[state=active]:bg-blue-100">
                       Expenses
                       {methods.formState.errors.expenses && (
                         <AlertCircle className="ml-2 h-4 w-4 text-red-500" />
                       )}
                     </TabsTrigger>
-                    <TabsTrigger
-                      value="income"
-                      className="data-[state=active]:bg-blue-100"
-                    >
+                    <TabsTrigger value="income" className="data-[state=active]:bg-blue-100">
                       Income
                       {methods.formState.errors.income && (
                         <AlertCircle className="ml-2 h-4 w-4 text-red-500" />
                       )}
                     </TabsTrigger>
-                    <TabsTrigger
-                      value="retirement"
-                      className="data-[state=active]:bg-blue-100"
-                    >
+                    <TabsTrigger value="retirement" className="data-[state=active]:bg-blue-100">
                       Retirement
                       {methods.formState.errors.retirement && (
                         <AlertCircle className="ml-2 h-4 w-4 text-red-500" />
@@ -107,8 +108,8 @@ export default function UserProfileForm({ userProfile }: UserProfileFormProps) {
               </CardContent>
             </Card>
             <div className="flex justify-end">
-              <Button type="submit" disabled={isPending} size="sm">
-                {isPending ? 'Saving...' : 'Save Changes'}
+              <Button type="submit" disabled={isPending || isOffline} size="sm">
+                {isPending ? 'Saving...' : isOffline ? 'Offline' : 'Save Changes'}
               </Button>
             </div>
           </CardContent>

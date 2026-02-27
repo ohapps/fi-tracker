@@ -9,6 +9,7 @@ import { Send, Bot, User, TrendingUp, Wallet, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { useIsOffline } from '@/hooks/use-is-offline';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -28,6 +29,7 @@ function getMessageText(message: Message): string {
 }
 
 export default function AnalyzePage() {
+  const isOffline = useIsOffline();
   const [input, setInput] = useState('');
   const { messages, sendMessage, status } = useChat({
     onError: (err: Error) => {
@@ -44,7 +46,7 @@ export default function AnalyzePage() {
 
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isLoading || isOffline) return;
 
     const text = input;
     setInput('');
@@ -62,7 +64,9 @@ export default function AnalyzePage() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <p className="text-muted-foreground mt-1">
-            Ask questions about your portfolio and get AI-powered insights.
+            {isOffline
+              ? 'AI analysis is unavailable while you are offline.'
+              : 'Ask questions about your portfolio and get AI-powered insights.'}
           </p>
         </div>
       </div>
@@ -92,8 +96,9 @@ export default function AnalyzePage() {
                   {suggestions.map((suggestion, idx) => (
                     <button
                       key={idx}
-                      onClick={() => setInput(suggestion.text)}
-                      className="flex items-center gap-3 p-4 rounded-xl bg-white border border-slate-200 hover:border-sky-300 hover:shadow-md transition-all text-left text-sm group"
+                      onClick={() => !isOffline && setInput(suggestion.text)}
+                      disabled={isOffline}
+                      className="flex items-center gap-3 p-4 rounded-xl bg-white border border-slate-200 hover:border-sky-300 hover:shadow-md transition-all text-left text-sm group disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <div className="p-2 rounded-lg bg-slate-50 group-hover:bg-sky-50 transition-colors">
                         {suggestion.icon}
@@ -179,15 +184,16 @@ export default function AnalyzePage() {
         <div className="p-4 bg-white/80 backdrop-blur-md border-t border-slate-200">
           <form onSubmit={handleSubmit} className="relative max-w-3xl mx-auto">
             <Input
-              className="w-full pr-14 py-6 rounded-2xl border-slate-200 focus-visible:ring-sky-500 shadow-sm text-base"
+              className="w-full pr-14 py-6 rounded-2xl border-slate-200 focus-visible:ring-sky-500 shadow-sm text-base disabled:bg-slate-50 disabled:text-slate-400"
               value={input}
-              placeholder="Ask about your financial future..."
+              placeholder={isOffline ? 'Offline Mode...' : 'Ask about your financial future...'}
               onChange={handleInputChange}
+              disabled={isOffline}
             />
             <Button
               type="submit"
-              disabled={isLoading || !input.trim()}
-              className="absolute right-1.5 top-1.5 h-9 w-9 p-0 rounded-xl bg-sky-600 hover:bg-sky-700 transition-colors"
+              disabled={isLoading || !input.trim() || isOffline}
+              className="absolute right-1.5 top-1.5 h-9 w-9 p-0 rounded-xl bg-sky-600 hover:bg-sky-700 transition-colors disabled:bg-slate-300"
             >
               <Send className="w-4 h-4 text-white" />
             </Button>

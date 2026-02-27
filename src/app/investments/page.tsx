@@ -1,30 +1,41 @@
-import { getInvestments } from '@/server/utils/investment/get-investments';
-import { getAccounts } from '@/server/utils/account/get-accounts';
+'use client';
+
 import type { Investment } from '@/types/investments';
 import type { Account } from '@/types/accounts';
 import AddInvestmentButton from '@/components/investments/AddInvestmentButton';
 import InvestmentCard from '@/components/investments/InvestmentCard';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import Link from 'next/link';
 import { X } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import useSWR from 'swr';
+import { fetcher } from '@/utils/fetcher';
 
-interface InvestmentsPageProps {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+interface InvestmentsData {
+  accounts: Account[];
+  investments: Investment[];
 }
 
-export default async function Investments({ searchParams }: InvestmentsPageProps) {
-  const investments: Investment[] = await getInvestments();
-  const accounts: Account[] = await getAccounts();
+export default function Investments() {
+  const searchParams = useSearchParams();
+  const accountId = searchParams.get('accountId') ?? undefined;
 
-  // Get accountId from search params
-  const resolvedSearchParams = await searchParams;
-  const accountId =
-    typeof resolvedSearchParams?.accountId === 'string'
-      ? resolvedSearchParams.accountId
-      : undefined;
+  const { data, error, isLoading } = useSWR<InvestmentsData>('/api/investments', fetcher);
+
+  if (error && !data) {
+    return (
+      <div className="p-6">
+        <div className="text-red-500">Failed to load investments. Please try again later.</div>
+      </div>
+    );
+  }
 
   // Filter accounts and investments if accountId is present
+  const accounts = data?.accounts ?? [];
+  const investments = data?.investments ?? [];
+
   const filteredAccounts = accountId ? accounts.filter((acc) => acc.id === accountId) : accounts;
   const filteredInvestments = accountId
     ? investments.filter((inv) => inv.accountId === accountId)
@@ -60,31 +71,49 @@ export default async function Investments({ searchParams }: InvestmentsPageProps
         </div>
         <AddInvestmentButton />
       </div>
-      {filteredAccounts.map((account) => {
-        const accId = account.id ?? '';
-        const investmentsForAccount = grouped[accId] ?? [];
-        if (investmentsForAccount.length === 0) return null;
-        return (
-          <div key={accId} className="mb-8">
-            <h2 className="text-lg font-semibold mb-2">{account.description}</h2>
-            <Separator className="mb-4" />
-            <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-              {investmentsForAccount.map((inv: Investment) => (
-                <InvestmentCard key={inv.id} investment={inv} />
-              ))}
+
+      {isLoading ? (
+        <div className="space-y-8">
+          {[1, 2].map((i) => (
+            <div key={i}>
+              <Skeleton className="h-6 w-48 mb-4" />
+              <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                {[1, 2, 3].map((j) => (
+                  <Skeleton key={j} className="h-48 w-full rounded-xl" />
+                ))}
+              </div>
             </div>
-          </div>
-        );
-      })}
-      {noAccount.length > 0 && !accountId && (
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold mb-2">No Account</h2>
-          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            {noAccount.map((inv) => (
-              <InvestmentCard key={inv.id} investment={inv} />
-            ))}
-          </div>
+          ))}
         </div>
+      ) : (
+        <>
+          {filteredAccounts.map((account) => {
+            const accId = account.id ?? '';
+            const investmentsForAccount = grouped[accId] ?? [];
+            if (investmentsForAccount.length === 0) return null;
+            return (
+              <div key={accId} className="mb-8">
+                <h2 className="text-lg font-semibold mb-2">{account.description}</h2>
+                <Separator className="mb-4" />
+                <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                  {investmentsForAccount.map((inv: Investment) => (
+                    <InvestmentCard key={inv.id} investment={inv} />
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+          {noAccount.length > 0 && !accountId && (
+            <div className="mb-8">
+              <h2 className="text-lg font-semibold mb-2">No Account</h2>
+              <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                {noAccount.map((inv) => (
+                  <InvestmentCard key={inv.id} investment={inv} />
+                ))}
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
