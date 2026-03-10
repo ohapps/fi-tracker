@@ -16,19 +16,33 @@ interface NavigatorWithStandalone extends Navigator {
   standalone?: boolean;
 }
 
+interface WindowWithMSStream extends Window {
+  MSStream?: unknown;
+}
+
 export function usePwaInstall() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstallable, setIsInstallable] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
+  const [isIos, setIsIos] = useState(false);
 
   useEffect(() => {
+    // Check if on iOS
+    const windowWithMSStream = window as unknown as WindowWithMSStream;
+    const ios = /iPad|iPhone|iPod/.test(window.navigator.userAgent) && !windowWithMSStream.MSStream;
+    setIsIos(ios);
+
     // Check if already installed
     const navigatorWithStandalone = window.navigator as NavigatorWithStandalone;
-    if (
+    const installed =
       window.matchMedia('(display-mode: standalone)').matches ||
-      navigatorWithStandalone.standalone
-    ) {
+      navigatorWithStandalone.standalone === true;
+
+    if (installed) {
       setIsInstalled(true);
+    } else if (ios) {
+      // If on iOS and not installed, it is "installable" (via manual instructions)
+      setIsInstallable(true);
     }
 
     const handler = (e: Event) => {
@@ -56,6 +70,11 @@ export function usePwaInstall() {
   }, []);
 
   const installPwa = async () => {
+    if (isIos) {
+      // On iOS, this is handled by showing a dialog in the component
+      return;
+    }
+
     if (!deferredPrompt) return;
 
     try {
@@ -79,5 +98,5 @@ export function usePwaInstall() {
     }
   };
 
-  return { isInstallable, isInstalled, installPwa };
+  return { isInstallable, isInstalled, isIos, installPwa };
 }

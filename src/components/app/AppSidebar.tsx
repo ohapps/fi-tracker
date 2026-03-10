@@ -8,6 +8,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
 import { User, Wallet, DollarSign, ChartCandlestick, Sparkles } from 'lucide-react';
@@ -19,8 +20,16 @@ import { useIsOffline } from '@/hooks/use-is-offline';
 
 export function AppSidebar() {
   const isOffline = useIsOffline();
+  const { isMobile, setOpenMobile } = useSidebar();
   const pathname = usePathname();
   const firstSegment = pathname.replace(/^\/|\/$/g, '').split('/')[0] || '';
+
+  const closeMobile = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -30,28 +39,44 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive={firstSegment === 'portfolio'}>
+              <SidebarMenuButton
+                asChild
+                isActive={firstSegment === 'portfolio'}
+                onClick={closeMobile}
+              >
                 <Link href="/portfolio">
                   <ChartCandlestick /> Portfolio
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive={firstSegment === 'accounts'}>
+              <SidebarMenuButton
+                asChild
+                isActive={firstSegment === 'accounts'}
+                onClick={closeMobile}
+              >
                 <Link href="/accounts">
                   <Wallet /> Accounts
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive={firstSegment === 'investments'}>
+              <SidebarMenuButton
+                asChild
+                isActive={firstSegment === 'investments'}
+                onClick={closeMobile}
+              >
                 <Link href="/investments">
                   <DollarSign /> Investments
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive={firstSegment === 'profile'}>
+              <SidebarMenuButton
+                asChild
+                isActive={firstSegment === 'profile'}
+                onClick={closeMobile}
+              >
                 <Link href="/profile">
                   <User /> Profile
                 </Link>
@@ -63,6 +88,7 @@ export function AppSidebar() {
                 isActive={firstSegment === 'analyze'}
                 disabled={isOffline}
                 className={isOffline ? 'opacity-50 grayscale' : ''}
+                onClick={closeMobile}
               >
                 <Link href="/analyze" onClick={(e) => isOffline && e.preventDefault()}>
                   <Sparkles /> Analyze {isOffline && '(Offline)'}
