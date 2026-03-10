@@ -27,9 +27,12 @@ export function usePwaInstall() {
   const [isIos, setIsIos] = useState(false);
 
   useEffect(() => {
-    // Check if on iOS
+    // Check if on iOS or iPadOS (including modern iPads which report as MacIntel)
     const windowWithMSStream = window as unknown as WindowWithMSStream;
-    const ios = /iPad|iPhone|iPod/.test(window.navigator.userAgent) && !windowWithMSStream.MSStream;
+    const isIpadOS = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+    const isStandardIos = /iPad|iPhone|iPod/.test(window.navigator.userAgent);
+
+    const ios = (isStandardIos || isIpadOS) && !windowWithMSStream.MSStream;
     setIsIos(ios);
 
     // Check if already installed
