@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ['esbuild', 'esbuild-wasm'],
 };
 
-// First wrap with Serwist, then with Sentry
+// Use the Turbopack-compatible wrapper
 const serwistConfig = withSerwist(nextConfig);
 
 export default withSentryConfig(serwistConfig, {

@@ -4,23 +4,34 @@ import { useEffect } from 'react';
 
 export default function PwaRegistration() {
   useEffect(() => {
-    if (
-      typeof window !== 'undefined' &&
-      'serviceWorker' in navigator &&
-      // @ts-expect-error: serwist is not defined on window
-      window.serwist !== undefined
-    ) {
-      navigator.serviceWorker.register('/sw.js').then((registration) => {
-        console.log('Serwist Service Worker registered with scope:', registration.scope);
-      });
-    } else if (
-      typeof window !== 'undefined' &&
-      'serviceWorker' in navigator &&
-      process.env.NODE_ENV === 'production'
-    ) {
-      navigator.serviceWorker.register('/sw.js').then((registration) => {
-        console.log('Service Worker registered with scope:', registration.scope);
-      });
+    if ('serviceWorker' in navigator && typeof window !== 'undefined') {
+      const swUrl = '/sw.js';
+
+      navigator.serviceWorker
+        .register(swUrl)
+        .then((registration) => {
+          console.log('PWA Service Worker registered successfully:', {
+            scope: registration.scope,
+            active: !!registration.active,
+            installing: !!registration.installing,
+            waiting: !!registration.waiting,
+          });
+
+          // Handle updates
+          registration.onupdatefound = () => {
+            const installingWorker = registration.installing;
+            if (installingWorker) {
+              installingWorker.onstatechange = () => {
+                if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  console.log('New PWA content is available; please refresh.');
+                }
+              };
+            }
+          };
+        })
+        .catch((error) => {
+          console.error('PWA Service Worker registration failed:', error);
+        });
     }
   }, []);
 
