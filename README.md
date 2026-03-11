@@ -29,4 +29,3 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - enhancements
   - add offline support
   - add Sentry configuration
-  - add install button on iOS
