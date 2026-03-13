@@ -18,6 +18,9 @@ const nextConfig: NextConfig = {
     ];
   },
   serverExternalPackages: ['esbuild', 'esbuild-wasm'],
+  outputFileTracingIncludes: {
+    '/sw/[path]': ['./node_modules/next/dist/server/config.js'],
+  },
 };
 
 // Use the Turbopack-compatible wrapper
