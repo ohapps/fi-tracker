@@ -17,8 +17,17 @@ export const GET = async (request: Request, context: { params: Promise<{ path: s
       process.cwd(),
       'node_modules/next/dist/compiled/find-up/index.js'
     );
+    const _logPath = path.join(process.cwd(), 'node_modules/next/dist/build/output/log.js');
+    const _envPath = path.join(process.cwd(), 'node_modules/@next/env/dist/index.js');
+    const _sharedPath = path.join(process.cwd(), 'node_modules/next/dist/shared/lib/constants.js');
     try {
-      if (fs.existsSync(_configPath) && fs.existsSync(_compiledPath)) {
+      if (
+        fs.existsSync(_configPath) &&
+        fs.existsSync(_compiledPath) &&
+        fs.existsSync(_logPath) &&
+        fs.existsSync(_envPath) &&
+        fs.existsSync(_sharedPath)
+      ) {
         // Just hints for the tracer.
       }
     } catch {
