@@ -52,10 +52,9 @@ export default function MonthlyIncomeChart({ data }: MonthlyIncomeChartProps) {
                 tickFormatter={(value) => `$${value.toLocaleString()}`}
               />
               <Tooltip
-                formatter={(value: number | string | undefined) => [
-                  `$${Number(value).toLocaleString()}`,
-                  'Income',
-                ]}
+                formatter={(
+                  value: string | number | ReadonlyArray<string | number> | undefined
+                ) => [`$${Number(value).toLocaleString()}`, 'Income']}
                 labelFormatter={(label) => `Month: ${label}`}
               />
               <Bar dataKey="income" fill="#4f46e5" radius={[4, 4, 0, 0]} />
