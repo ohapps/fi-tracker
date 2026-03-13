@@ -56,7 +56,9 @@ export default function InvestmentPerformanceCard({ data }: InvestmentPerformanc
                   }
                 />
                 <Tooltip
-                  formatter={(value: number | string | undefined) =>
+                  formatter={(
+                    value: string | number | ReadonlyArray<string | number> | undefined
+                  ) =>
                     new Intl.NumberFormat('en-US', {
                       style: 'currency',
                       currency: 'USD',
@@ -122,7 +124,9 @@ export default function InvestmentPerformanceCard({ data }: InvestmentPerformanc
                 />
                 <Tooltip
                   cursor={{ fill: 'transparent' }}
-                  formatter={(value: number | string | undefined) =>
+                  formatter={(
+                    value: string | number | ReadonlyArray<string | number> | undefined
+                  ) =>
                     new Intl.NumberFormat('en-US', {
                       style: 'currency',
                       currency: 'USD',
