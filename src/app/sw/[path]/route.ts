@@ -13,9 +13,13 @@ export const GET = async (request: Request, context: { params: Promise<{ path: s
   // without triggering Turbopack's strict build-time dependency checks.
   if (process.env.NODE_ENV === 'production') {
     const _configPath = path.join(process.cwd(), 'node_modules/next/dist/server/config.js');
+    const _compiledPath = path.join(
+      process.cwd(),
+      'node_modules/next/dist/compiled/find-up/index.js'
+    );
     try {
-      if (fs.existsSync(_configPath)) {
-        // Just a hint for the tracer.
+      if (fs.existsSync(_configPath) && fs.existsSync(_compiledPath)) {
+        // Just hints for the tracer.
       }
     } catch {
       // Ignore errors during tracing hint
