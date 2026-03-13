@@ -19,9 +19,12 @@ const nextConfig: NextConfig = {
   },
   serverExternalPackages: ['esbuild', 'esbuild-wasm'],
   outputFileTracingIncludes: {
-    '/sw/[path]': ['./node_modules/next/dist/server/config.js'],
-    '/sw/sw.js': ['./node_modules/next/dist/server/config.js'],
-    '/sw/*': ['./node_modules/next/dist/server/config.js'],
+    '/sw/[path]': [
+      './node_modules/next/dist/server/**/*',
+      './node_modules/next/dist/compiled/**/*',
+    ],
+    '/sw/sw.js': ['./node_modules/next/dist/server/**/*', './node_modules/next/dist/compiled/**/*'],
+    '/sw/*': ['./node_modules/next/dist/server/**/*', './node_modules/next/dist/compiled/**/*'],
   },
 };
 
