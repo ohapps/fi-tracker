@@ -22,9 +22,30 @@ const nextConfig: NextConfig = {
     '/sw/[path]': [
       './node_modules/next/dist/server/**/*',
       './node_modules/next/dist/compiled/**/*',
+      './node_modules/next/dist/build/**/*',
+      './node_modules/next/dist/shared/**/*',
+      './node_modules/next/dist/lib/**/*',
+      './node_modules/@next/env/**/*',
+      './node_modules/next/package.json',
     ],
-    '/sw/sw.js': ['./node_modules/next/dist/server/**/*', './node_modules/next/dist/compiled/**/*'],
-    '/sw/*': ['./node_modules/next/dist/server/**/*', './node_modules/next/dist/compiled/**/*'],
+    '/sw/sw.js': [
+      './node_modules/next/dist/server/**/*',
+      './node_modules/next/dist/compiled/**/*',
+      './node_modules/next/dist/build/**/*',
+      './node_modules/next/dist/shared/**/*',
+      './node_modules/next/dist/lib/**/*',
+      './node_modules/@next/env/**/*',
+      './node_modules/next/package.json',
+    ],
+    '/sw/*': [
+      './node_modules/next/dist/server/**/*',
+      './node_modules/next/dist/compiled/**/*',
+      './node_modules/next/dist/build/**/*',
+      './node_modules/next/dist/shared/**/*',
+      './node_modules/next/dist/lib/**/*',
+      './node_modules/@next/env/**/*',
+      './node_modules/next/package.json',
+    ],
   },
 };
 
