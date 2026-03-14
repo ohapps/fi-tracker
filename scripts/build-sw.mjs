@@ -15,7 +15,7 @@ async function buildSW() {
             outfile: path.join(root, 'public/sw.js'),
             bundle: true,
             minify: process.env.NODE_ENV === 'production',
-            format: 'esm',
+            format: 'iife',
             platform: 'browser',
             define: {
                 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
