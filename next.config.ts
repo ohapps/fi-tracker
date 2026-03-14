@@ -1,56 +1,16 @@
 import type { NextConfig } from 'next';
-import { withSerwist } from '@serwist/turbopack';
+
 import { withSentryConfig } from '@sentry/nextjs';
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
   output: 'standalone',
-  async rewrites() {
-    return [
-      {
-        source: '/sw.js',
-        destination: '/sw/sw.js',
-      },
-      {
-        source: '/sw.js.map',
-        destination: '/sw/sw.js.map',
-      },
-    ];
-  },
+
   serverExternalPackages: ['esbuild', 'esbuild-wasm'],
-  outputFileTracingIncludes: {
-    '/sw/[path]': [
-      './node_modules/next/dist/server/**/*',
-      './node_modules/next/dist/compiled/**/*',
-      './node_modules/next/dist/build/**/*',
-      './node_modules/next/dist/shared/**/*',
-      './node_modules/next/dist/lib/**/*',
-      './node_modules/@next/env/**/*',
-      './node_modules/next/package.json',
-    ],
-    '/sw/sw.js': [
-      './node_modules/next/dist/server/**/*',
-      './node_modules/next/dist/compiled/**/*',
-      './node_modules/next/dist/build/**/*',
-      './node_modules/next/dist/shared/**/*',
-      './node_modules/next/dist/lib/**/*',
-      './node_modules/@next/env/**/*',
-      './node_modules/next/package.json',
-    ],
-    '/sw/*': [
-      './node_modules/next/dist/server/**/*',
-      './node_modules/next/dist/compiled/**/*',
-      './node_modules/next/dist/build/**/*',
-      './node_modules/next/dist/shared/**/*',
-      './node_modules/next/dist/lib/**/*',
-      './node_modules/@next/env/**/*',
-      './node_modules/next/package.json',
-    ],
-  },
 };
 
-// Use the Turbopack-compatible wrapper
-const serwistConfig = withSerwist(nextConfig);
+// We'll move to Plan B: Static bundling of the service worker.
+const serwistConfig = nextConfig; // Temporarily disable withSerwist to get a clean build
 
 export default withSentryConfig(serwistConfig, {
   // For all available options, see:
