@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_ENV=development node scripts/build-sw.mjs && next dev --turbopack",
-    "build": "NODE_ENV=production node scripts/build-sw.mjs && next build --turbopack",
+    "dev": "next dev --turbopack",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
