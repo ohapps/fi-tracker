@@ -1,16 +1,20 @@
 import type { NextConfig } from 'next';
-
+import withSerwistInit from '@serwist/next';
 import { withSentryConfig } from '@sentry/nextjs';
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
   output: 'standalone',
-
   serverExternalPackages: ['esbuild', 'esbuild-wasm'],
 };
 
-// We'll move to Plan B: Static bundling of the service worker.
-const serwistConfig = nextConfig; // Temporarily disable withSerwist to get a clean build
+const withSerwist = withSerwistInit({
+  swSrc: 'src/app/sw.ts',
+  swDest: 'public/sw.js',
+  disable: process.env.NODE_ENV === 'development',
+});
+
+const serwistConfig = withSerwist(nextConfig);
 
 export default withSentryConfig(serwistConfig, {
   // For all available options, see:
